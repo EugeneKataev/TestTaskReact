@@ -28,6 +28,32 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
 
     const [errors, setErrors] = useState<FormErrors>({});
 
+    const validateField = (fieldName: keyof FormErrors, value: string) => {
+        try {
+            // Валидируем конкретное поле
+            if (fieldName === 'text') {
+                CommentSchema.shape.text.parse(value);
+            } else if (fieldName === 'author') {
+                CommentSchema.shape.author.parse(value);
+            }
+
+            // Если валидация прошла, убираем ошибку для этого поля
+            setErrors(prev => ({
+                ...prev,
+                [fieldName]: undefined
+            }));
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'issues' in error) {
+                const zodError = error as { issues: Array<{ message: string }> };
+                const errorMessage = zodError.issues[0]?.message || 'Invalid value';
+                setErrors(prev => ({
+                    ...prev,
+                    [fieldName]: errorMessage
+                }));
+            }
+        }
+    };
+
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
@@ -37,13 +63,17 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
             [name]: value
         }));
 
-        // Clear field error when user starts typing
-        if (errors[name as keyof FormErrors]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: undefined
-            }));
-        }
+        // Валидируем поле в реальном времени (с небольшой задержкой)
+        setTimeout(() => {
+            validateField(name as keyof FormErrors, value);
+        }, 300);
+    };
+
+    const handleBlur = (
+        e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        validateField(name as keyof FormErrors, value);
     };
 
     const validateForm = (): boolean => {
@@ -54,9 +84,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
         } catch (error: unknown) {
             const newErrors: FormErrors = {};
 
-            if (error && typeof error === 'object' && 'errors' in error) {
-                const zodError = error as { errors: Array<{ path: string[]; message: string }> };
-                zodError.errors.forEach((err) => {
+            if (error && typeof error === 'object' && 'issues' in error) {
+                const zodError = error as { issues: Array<{ path: string[]; message: string }> };
+                zodError.issues.forEach((err) => {
                     const field = err.path[0] as keyof FormErrors;
                     newErrors[field] = err.message;
                 });
@@ -110,6 +140,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
                         name="author"
                         value={formData.author}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         className={`formInput ${errors.author ? 'error' : ''}`}
                         placeholder="Enter your name"
                         disabled={loading}
@@ -130,6 +161,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId }) => {
                         name="text"
                         value={formData.text}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         className={`formTextarea ${errors.text ? 'error' : ''}`}
                         placeholder="Write your comment here..."
                         rows={4}

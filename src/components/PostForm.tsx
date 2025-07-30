@@ -42,12 +42,44 @@ const PostForm: React.FC<PostFormProps> = ({
             [name]: value
         }));
 
-        // Clear error for the field when it changes
-        if (errors[name as keyof FormErrors]) {
+        // Валидируем поле в реальном времени (с небольшой задержкой)
+        setTimeout(() => {
+            validateField(name as keyof FormErrors, value);
+        }, 300);
+    };
+
+    const handleBlur = (
+        e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        validateField(name as keyof FormErrors, value);
+    };
+
+    const validateField = (fieldName: keyof FormErrors, value: string) => {
+        try {
+            // Валидируем конкретное поле
+            if (fieldName === 'title') {
+                PostSchema.shape.title.parse(value);
+            } else if (fieldName === 'content') {
+                PostSchema.shape.content.parse(value);
+            } else if (fieldName === 'author') {
+                PostSchema.shape.author.parse(value);
+            }
+
+            // Если валидация прошла, убираем ошибку для этого поля
             setErrors(prev => ({
                 ...prev,
-                [name]: undefined
+                [fieldName]: undefined
             }));
+        } catch (error: unknown) {
+            if (error && typeof error === 'object' && 'issues' in error) {
+                const zodError = error as { issues: Array<{ message: string }> };
+                const errorMessage = zodError.issues[0]?.message || 'Invalid value';
+                setErrors(prev => ({
+                    ...prev,
+                    [fieldName]: errorMessage
+                }));
+            }
         }
     };
 
@@ -59,9 +91,9 @@ const PostForm: React.FC<PostFormProps> = ({
         } catch (error: unknown) {
             const newErrors: FormErrors = {};
 
-            if (error && typeof error === 'object' && 'errors' in error) {
-                const zodError = error as { errors: Array<{ path: string[]; message: string }> };
-                zodError.errors.forEach((err) => {
+            if (error && typeof error === 'object' && 'issues' in error) {
+                const zodError = error as { issues: Array<{ path: string[]; message: string }> };
+                zodError.issues.forEach((err) => {
                     const field = err.path[0] as keyof FormErrors;
                     newErrors[field] = err.message;
                 });
@@ -101,6 +133,7 @@ const PostForm: React.FC<PostFormProps> = ({
                         name="title"
                         value={formData.title}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         className={`formInput ${errors.title ? 'error' : ''}`}
                         placeholder="Enter post title"
                         disabled={loading}
@@ -122,6 +155,7 @@ const PostForm: React.FC<PostFormProps> = ({
                         name="author"
                         value={formData.author}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         className={`formInput ${errors.author ? 'error' : ''}`}
                         placeholder="Enter author name"
                         disabled={loading}
@@ -142,6 +176,7 @@ const PostForm: React.FC<PostFormProps> = ({
                         name="content"
                         value={formData.content}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}
                         className={`formTextarea ${errors.content ? 'error' : ''}`}
                         placeholder="Enter post content (minimum 10 characters)"
                         rows={8}
