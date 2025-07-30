@@ -7,7 +7,6 @@ import { RootState, AppDispatch } from '@/lib/store';
 import { fetchPostById, deletePost, clearCurrentPost } from '@/store/postsSlice';
 import { fetchComments } from '@/store/commentsSlice';
 import PostDetail from '@/components/PostDetail';
-import CommentList from '@/components/CommentList';
 import CommentForm from '@/components/CommentForm';
 import '@/styles/PostPage.css';
 
@@ -20,7 +19,7 @@ export default function PostPage() {
   const postId = params.id as string;
 
   const { currentPost, loading: postLoading, error: postError } = useSelector((state: RootState) => state.posts);
-  const { comments, loading: commentsLoading } = useSelector((state: RootState) => state.comments);
+  const { comments } = useSelector((state: RootState) => state.comments);
 
   useEffect(() => {
     if (postId) {
@@ -84,7 +83,6 @@ export default function PostPage() {
       
       <div className="comments-section">
         <CommentForm postId={postId} />
-        <CommentList comments={comments} loading={commentsLoading} />
       </div>
     </div>
   );

@@ -1,10 +1,9 @@
 import { Comment, CommentFormData, CommentDocument } from '@/types';
-import { 
-  query, 
-  where, 
-  orderBy, 
-  getDocs, 
-  addDoc, 
+import {
+  query,
+  where,
+  getDocs,
+  addDoc,
   serverTimestamp,
   deleteDoc,
   doc
@@ -12,7 +11,7 @@ import {
 import { db, commentsCollection, convertCommentFromFirestore } from '@/lib/firebase';
 import { Dispatch } from 'redux';
 
-// Типы действий
+// type
 export const FETCH_COMMENTS_REQUEST = 'FETCH_COMMENTS_REQUEST';
 export const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
 export const FETCH_COMMENTS_FAILURE = 'FETCH_COMMENTS_FAILURE';
@@ -24,7 +23,7 @@ export const DELETE_COMMENTS_BY_POST_SUCCESS = 'DELETE_COMMENTS_BY_POST_SUCCESS'
 export const DELETE_COMMENTS_BY_POST_FAILURE = 'DELETE_COMMENTS_BY_POST_FAILURE';
 export const CLEAR_COMMENTS_ERROR = 'CLEAR_COMMENTS_ERROR';
 
-// Интерфейс состояния
+// Status interface
 export interface CommentsState {
   comments: Comment[];
   loading: boolean;
@@ -85,26 +84,26 @@ export const clearError = () => ({
   type: CLEAR_COMMENTS_ERROR,
 });
 
-// Async thunk для получения комментариев по postId
 export const fetchComments = (postId: string) => {
   return async (dispatch: Dispatch) => {
     dispatch(fetchCommentsRequest());
-    
+
     try {
       const q = query(
         commentsCollection,
-        where('postId', '==', postId),
-        orderBy('createdAt', 'asc')
+        where('postId', '==', postId)
       );
-      
+
       const querySnapshot = await getDocs(q);
       const comments: Comment[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const comment = convertCommentFromFirestore(doc.id, doc.data() as CommentDocument);
         comments.push(comment);
       });
-      
+
+      comments.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+
       dispatch(fetchCommentsSuccess(comments));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error loading comments';
@@ -113,7 +112,7 @@ export const fetchComments = (postId: string) => {
   };
 };
 
-// Async thunk для создания комментария
+// Async thunk for create comment
 export const createComment = (postId: string, commentData: CommentFormData) => {
   return async (dispatch: Dispatch) => {
     dispatch(createCommentRequest());
@@ -126,7 +125,7 @@ export const createComment = (postId: string, commentData: CommentFormData) => {
         createdAt: serverTimestamp()
       });
       
-      // Создаем объект комментария для добавления в store
+      // Create an object of commentary for adding to Store
       const newComment: Comment = {
         id: docRef.id,
         postId,
@@ -143,7 +142,7 @@ export const createComment = (postId: string, commentData: CommentFormData) => {
   };
 };
 
-// Async thunk для удаления всех комментариев поста
+// Async thunk for delete all comment for post
 export const deleteCommentsByPost = (postId: string) => {
   return async (dispatch: Dispatch) => {
     dispatch(deleteCommentsByPostRequest());
@@ -156,7 +155,7 @@ export const deleteCommentsByPost = (postId: string) => {
       
       const querySnapshot = await getDocs(q);
       
-      // Удаляем все комментарии поста
+      // delete all the comments of the post
       const deletePromises = querySnapshot.docs.map(commentDoc => 
         deleteDoc(doc(db, 'comments', commentDoc.id))
       );

@@ -103,12 +103,19 @@ interface Comment {
 #### Получение комментариев к посту
 
 ```typescript
+// Получаем комментарии без сортировки в запросе (чтобы избежать составного индекса)
 const q = query(
   commentsCollection,
-  where('postId', '==', postId),
-  orderBy('createdAt', 'desc')
+  where('postId', '==', postId)
 );
 const querySnapshot = await getDocs(q);
+
+// Сортируем на клиенте
+const comments = [];
+querySnapshot.forEach((doc) => {
+  comments.push(convertCommentFromFirestore(doc.id, doc.data()));
+});
+comments.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 ```
 
 #### Создание комментария
