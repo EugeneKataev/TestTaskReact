@@ -1,0 +1,81 @@
+.postCard {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.postCard:hover {
+  border-color: #007bff;
+  transition: none;
+}
+
+.postCardContent {
+  margin-bottom: 12px;
+}
+
+.postCardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.postCardExcerpt {
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.postCardMeta {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.postCardAuthor {
+  font-weight: 500;
+}
+
+.postCardDate {
+  margin-top: 4px;
+}
+
+.postCardActions {
+  display: flex;
+  gap: 8px;
+}
+
+.postCardBtn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  flex: 1;
+}
+
+.postCardBtnEdit {
+  background-color: #007bff;
+  color: white;
+}
+
+.postCardBtnEdit:hover {
+  background-color: #0056b3;
+  transition: none;
+}
+
+.postCardBtnDelete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.postCardBtnDelete:hover {
+  background-color: #c82333;
+  transition: none;
+}
+
+.postCardBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

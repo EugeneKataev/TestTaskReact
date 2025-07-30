@@ -1,0 +1,107 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Post } from '@/types';
+import ConfirmDialog from './ConfirmDialog';
+import '../styles/PostCard.css';
+
+interface PostCardProps {
+  post: Post;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  loading?: boolean;
+}
+
+const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = false }) => {
+  const router = useRouter();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const handleCardClick = () => {
+    router.push(`/post/${post.id}`);
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onEdit) {
+      onEdit(post.id);
+    } else {
+      router.push(`/post/${post.id}/edit`);
+    }
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
+    setShowDeleteDialog(false);
+    if (onDelete) {
+      onDelete(post.id);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteDialog(false);
+  };
+
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(date);
+  };
+
+  const getExcerpt = (content: string, maxLength: number = 150) => {
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength).trim() + '...';
+  };
+
+  return (
+    <article className="postCard" onClick={handleCardClick}>
+      <div className="postCardContent">
+        <h2 className="postCardTitle">{post.title}</h2>
+        <p className="postCardExcerpt">{getExcerpt(post.content)}</p>
+        <div className="postCardMeta">
+          <span className="postCardAuthor">By {post.author}</span>
+          <div className="postCardDate">{formatDate(post.createdAt)}</div>
+        </div>
+      </div>
+      <div className="postCardActions">
+        <button 
+          className="postCardBtn postCardBtnEdit"
+          onClick={handleEditClick}
+          title="Edit post"
+          disabled={loading}
+        >
+          Edit
+        </button>
+        <button 
+          className="postCardBtn postCardBtnDelete"
+          onClick={handleDeleteClick}
+          title="Delete post"
+          disabled={loading}
+        >
+          Delete
+        </button>
+      </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Delete Post"
+        message="Are you sure you want to delete this post? This action cannot be undone and will also delete all comments associated with this post."
+        confirmText="Delete"
+        cancelText="Cancel"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        loading={loading}
+      />
+    </article>
+  );
+};
+
+export default PostCard;

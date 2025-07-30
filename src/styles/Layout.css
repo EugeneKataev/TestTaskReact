@@ -1,59 +1,11 @@
-/* Global variables */
-:root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --background: #ffffff;
-  --background-secondary: #f9fafb;
-  --border-color: #e5e7eb;
-  --shadow: none;
-  --shadow-lg: none;
-}
-
-/* Reset styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Base styles */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-  color: var(--text-primary);
-  background-color: var(--background);
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-a:focus {
-  outline: none;
-  transition: none;
-}
-
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
-  font-family: inherit;
-}
-
-button:focus {
-  outline: none;
-  transition: none;
-}
-
+/* Layout стили */
 .layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
+/* Header стили */
 .header {
   background-color: var(--background);
   border-bottom: 1px solid var(--border-color);
@@ -86,6 +38,7 @@ button:focus {
   transition: none;
 }
 
+/* Навигация */
 .nav {
   display: flex;
   gap: 2rem;
@@ -102,6 +55,7 @@ button:focus {
   transition: none;
 }
 
+/* Мобильное меню */
 .mobile-menu-button {
   display: none;
   flex-direction: column;
@@ -143,6 +97,7 @@ button:focus {
   display: none;
 }
 
+/* Main контент */
 .main {
   flex: 1;
   padding: 2rem 0;
@@ -205,8 +160,7 @@ button:focus {
   }
 
   .header-container,
-  .main-container,
-  .footer-container {
+  .main-container {
     padding: 0 0.5rem;
   }
 }
