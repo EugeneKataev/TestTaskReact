@@ -4,13 +4,24 @@ import { Post, Comment, PostDocument, CommentDocument } from '@/types';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyAOwcRmpVc4QVgAZO7ulArmdFHz6J_4WpU",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "testblogapp-71500.firebaseapp.com",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "testblogapp-71500",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "testblogapp-71500.firebasestorage.app",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "574425098737",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:574425098737:web:ac3e698910c8b2ad43bc50"
 };
+
+// Validate Firebase configuration
+const requiredConfigKeys = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+const missingConfigKeys = requiredConfigKeys.filter(key => !firebaseConfig[key as keyof typeof firebaseConfig]);
+
+if (missingConfigKeys.length > 0) {
+  console.error('Missing Firebase configuration keys:', missingConfigKeys);
+  console.error('Current config:', firebaseConfig);
+} else {
+  console.log('Firebase configuration loaded successfully');
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -204,6 +204,7 @@ export const createPost = (postData: PostFormData) => {
         dispatch(createPostSuccess(post));
       }
     } catch (error) {
+      console.error('Error creating post:', error);
       const errorMessage = error instanceof Error ? error.message : 'Error creating post';
       dispatch(createPostFailure(errorMessage));
     }
