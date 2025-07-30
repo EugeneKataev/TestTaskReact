@@ -1,31 +1,31 @@
 # Blog App
 
-## Описание
+## Description
 
-Blog App - это простое приложение для ведения блога, разработанное с использованием React, Next.js и Firebase. Приложение позволяет пользователям создавать, просматривать, редактировать и удалять посты, а также оставлять комментарии к ним.
+Blog App is a simple blogging application built with React, Next.js, and Firebase. The application allows users to create, view, edit, and delete posts, as well as leave comments on them.
 
-## Технологии
+## Technologies
 
 - **Frontend**: React 19, Next.js 15
-- **Управление состоянием**: Redux, Redux Toolkit
-- **База данных**: Firebase Firestore
-- **Валидация**: Zod
-- **Типизация**: TypeScript
+- **State Management**: Redux
+- **Database**: Firebase Firestore
+- **Validation**: Zod
+- **Type Safety**: TypeScript
 
-## Функциональность
+## Features
 
-- Просмотр списка постов
-- Создание новых постов
-- Редактирование существующих постов
-- Удаление постов
-- Добавление комментариев к постам
-- Просмотр комментариев
+- View list of posts
+- Create new posts
+- Edit existing posts
+- Delete posts
+- Add comments to posts
+- View comments
 
 ## API
 
-### Посты
+### Posts
 
-#### Структура данных поста
+#### Post Data Structure
 
 ```typescript
 interface Post {
@@ -38,22 +38,22 @@ interface Post {
 }
 ```
 
-#### Получение списка постов
+#### Get List of Posts
 
 ```typescript
-// Получение всех постов, отсортированных по дате создания (по убыванию)
+// Get all posts sorted by creation date (descending)
 const q = query(postsCollection, orderBy('createdAt', 'desc'));
 const querySnapshot = await getDocs(q);
 ```
 
-#### Получение поста по ID
+#### Get Post by ID
 
 ```typescript
 const docRef = doc(postsCollection, postId);
 const docSnap = await getDoc(docRef);
 ```
 
-#### Создание поста
+#### Create Post
 
 ```typescript
 const newPost: CreatePostDocument = {
@@ -66,7 +66,7 @@ const newPost: CreatePostDocument = {
 const docRef = await addDoc(postsCollection, newPost);
 ```
 
-#### Обновление поста
+#### Update Post
 
 ```typescript
 const updateData: UpdatePostDocument = {
@@ -79,16 +79,16 @@ const docRef = doc(postsCollection, postId);
 await updateDoc(docRef, updateData);
 ```
 
-#### Удаление поста
+#### Delete Post
 
 ```typescript
 const docRef = doc(postsCollection, postId);
 await deleteDoc(docRef);
 ```
 
-### Комментарии
+### Comments
 
-#### Структура данных комментария
+#### Comment Data Structure
 
 ```typescript
 interface Comment {
@@ -100,17 +100,17 @@ interface Comment {
 }
 ```
 
-#### Получение комментариев к посту
+#### Get Comments for Post
 
 ```typescript
-// Получаем комментарии без сортировки в запросе (чтобы избежать составного индекса)
+// Get comments without sorting in query (to avoid composite index)
 const q = query(
   commentsCollection,
   where('postId', '==', postId)
 );
 const querySnapshot = await getDocs(q);
 
-// Сортируем на клиенте
+// Sort on client side
 const comments = [];
 querySnapshot.forEach((doc) => {
   comments.push(convertCommentFromFirestore(doc.id, doc.data()));
@@ -118,7 +118,7 @@ querySnapshot.forEach((doc) => {
 comments.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 ```
 
-#### Создание комментария
+#### Create Comment
 
 ```typescript
 const newComment = {
@@ -130,7 +130,7 @@ const newComment = {
 const docRef = await addDoc(commentsCollection, newComment);
 ```
 
-#### Удаление комментариев поста
+#### Delete Post Comments
 
 ```typescript
 const q = query(commentsCollection, where('postId', '==', postId));
@@ -140,35 +140,35 @@ querySnapshot.forEach(async (document) => {
 });
 ```
 
-## Запуск проекта
+## Getting Started
 
 ```bash
-# Установка зависимостей
+# Install dependencies
 npm install
 
-# Запуск в режиме разработки
+# Run in development mode
 npm run dev
 
-# Сборка проекта
+# Build project
 npm run build
 
-# Запуск собранного проекта
+# Run built project
 npm run start
 ```
 
-## Валидация данных
+## Data Validation
 
-Приложение использует библиотеку Zod для валидации данных форм:
+The application uses the Zod library for form data validation:
 
 ```typescript
-// Валидация поста
+// Post validation
 const PostSchema = z.object({
   title: z.string().min(1, "Title is required").max(200, "Title is too long"),
   content: z.string().min(10, "Content must be at least 10 characters"),
   author: z.string().min(1, "Author name is required").max(100, "Author name is too long")
 });
 
-// Валидация комментария
+// Comment validation
 const CommentSchema = z.object({
   text: z.string().min(1, "Comment text is required").max(500, "Comment is too long"),
   author: z.string().min(1, "Author name is required").max(100, "Author name is too long")
