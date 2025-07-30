@@ -9,15 +9,17 @@ import '../styles/PostCard.css';
 interface PostCardProps {
   post: Post;
   onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (id: string) => Promise<void> | void;
   loading?: boolean;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = false }) => {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleCardClick = () => {
+    if (isDeleting || showDeleteDialog) return;
     router.push(`/post/${post.id}`);
   };
 
@@ -35,10 +37,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = f
     setShowDeleteDialog(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     setShowDeleteDialog(false);
+    setIsDeleting(true);
     if (onDelete) {
-      onDelete(post.id);
+      try {
+        await onDelete(post.id);
+      } catch (error) {
+        console.error('Error deleting post:', error);
+      } finally {
+        setIsDeleting(false);
+      }
     }
   };
 
@@ -98,7 +107,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = f
         cancelText="Cancel"
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        loading={loading}
+        loading={loading || isDeleting}
       />
     </article>
   );

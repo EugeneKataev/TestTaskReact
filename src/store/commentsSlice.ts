@@ -30,7 +30,7 @@ export interface CommentsState {
   error: string | null;
 }
 
-// Начальное состояние
+// Initial state
 const initialState: CommentsState = {
   comments: [],
   loading: false,
@@ -146,26 +146,28 @@ export const createComment = (postId: string, commentData: CommentFormData) => {
 export const deleteCommentsByPost = (postId: string) => {
   return async (dispatch: Dispatch) => {
     dispatch(deleteCommentsByPostRequest());
-    
+
     try {
       const q = query(
         commentsCollection,
         where('postId', '==', postId)
       );
-      
+
       const querySnapshot = await getDocs(q);
-      
+
       // delete all the comments of the post
-      const deletePromises = querySnapshot.docs.map(commentDoc => 
+      const deletePromises = querySnapshot.docs.map(commentDoc =>
         deleteDoc(doc(db, 'comments', commentDoc.id))
       );
-      
+
       await Promise.all(deletePromises);
-      
+
       dispatch(deleteCommentsByPostSuccess(postId));
+      return Promise.resolve();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error deleting comments';
       dispatch(deleteCommentsByPostFailure(errorMessage));
+      return Promise.reject(error);
     }
   };
 };

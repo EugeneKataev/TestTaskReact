@@ -1,32 +1,20 @@
-import { getDocs, query, orderBy } from 'firebase/firestore';
-import { postsCollection, convertPostFromFirestore } from '@/lib/firebase';
-import { Post, PostDocument } from '@/types';
+'use client';
+
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/lib/store';
+import { fetchPosts } from '@/store/postsSlice';
 import PostList from '@/components/PostList';
 import Link from 'next/link';
 import '@/styles/HomePage.css';
 
-// Server function for loading posts
-async function getPosts(): Promise<Post[]> {
-  try {
-    const q = query(postsCollection, orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
-    const posts: Post[] = [];
+export default function Home() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { posts, loading, error } = useSelector((state: RootState) => state.posts);
 
-    querySnapshot.forEach((doc) => {
-      const post = convertPostFromFirestore(doc.id, doc.data() as PostDocument);
-      posts.push(post);
-    });
-
-    return posts;
-  } catch (error) {
-    console.error('Error loading posts on server:', error);
-    return [];
-  }
-}
-
-export default async function Home() {
-  // Loading posts on the server
-  const posts = await getPosts();
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
 
   return (
     <div className="homePage">
@@ -38,7 +26,16 @@ export default async function Home() {
         </Link>
       </div>
 
-      <PostList posts={posts} loading={false} />
+      <PostList posts={posts} loading={loading} />
+
+      {error && (
+        <div className="error-message">
+          <p>Error loading posts: {error}</p>
+          <button onClick={() => dispatch(fetchPosts())} className="retry-button">
+            Retry
+          </button>
+        </div>
+      )}
     </div>
   );
 }

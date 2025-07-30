@@ -30,7 +30,12 @@ const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLo
   }, [dispatch, propsPosts, storePosts.length, storeLoading]);
 
   const handleDeletePost = async (postId: string) => {
-    dispatch(deletePost(postId));
+    try {
+      await dispatch(deletePost(postId));
+      // Пост автоматически удалится из списка через reducer
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
   };
 
   if (loading) {

@@ -15,6 +15,7 @@ export default function PostPage() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const postId = params.id as string;
 
@@ -40,12 +41,29 @@ export default function PostPage() {
     setIsDeleting(true);
     try {
       await dispatch(deletePost(postId));
-      router.push('/');
+      setIsDeleted(true);
     } catch (error) {
       console.error('Error deleting post:', error);
       setIsDeleting(false);
     }
   };
+
+  // Редирект после успешного удаления
+  useEffect(() => {
+    if (isDeleted) {
+      router.replace('/');
+    }
+  }, [isDeleted, router]);
+
+  if (isDeleted) {
+    return (
+      <div className="page-container">
+        <div className="loading-state">
+          <p>Post deleted successfully. Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (postLoading) {
     return (

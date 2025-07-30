@@ -128,7 +128,6 @@ export const deletePostFailure = (error: string) => ({
   payload: error,
 });
 
-// Утилитарные action creators
 export const clearError = () => ({
   type: CLEAR_POSTS_ERROR,
 });
@@ -137,9 +136,7 @@ export const clearCurrentPost = () => ({
   type: CLEAR_CURRENT_POST,
 });
 
-// Async Thunk функции
 
-// Получение всех постов
 export const fetchPosts = () => {
   return async (dispatch: Dispatch) => {
     dispatch(fetchPostsRequest());
@@ -161,7 +158,6 @@ export const fetchPosts = () => {
   };
 };
 
-// Получение поста по ID
 export const fetchPostById = (postId: string) => {
   return async (dispatch: Dispatch) => {
     dispatch(fetchPostByIdRequest());
@@ -182,7 +178,6 @@ export const fetchPostById = (postId: string) => {
   };
 };
 
-// Создание нового поста
 export const createPost = (postData: PostFormData) => {
   return async (dispatch: Dispatch) => {
     dispatch(createPostRequest());
@@ -197,7 +192,6 @@ export const createPost = (postData: PostFormData) => {
 
       const docRef = await addDoc(postsCollection, newPostData);
 
-      // Получаем созданный документ для получения актуальных timestamp'ов
       const createdDoc = await getDoc(docRef);
       if (createdDoc.exists()) {
         const post = convertPostFromFirestore(createdDoc.id, createdDoc.data() as PostDocument);
@@ -211,7 +205,6 @@ export const createPost = (postData: PostFormData) => {
   };
 };
 
-// Обновление поста
 export const updatePost = (postId: string, postData: PostFormData) => {
   return async (dispatch: Dispatch) => {
     dispatch(updatePostRequest());
@@ -226,7 +219,6 @@ export const updatePost = (postId: string, postData: PostFormData) => {
 
       await updateDoc(postDoc, updateData as Partial<PostDocument>);
 
-      // Получаем обновленный документ
       const updatedDoc = await getDoc(postDoc);
       if (updatedDoc.exists()) {
         const post = convertPostFromFirestore(updatedDoc.id, updatedDoc.data() as PostDocument);
@@ -239,22 +231,21 @@ export const updatePost = (postId: string, postData: PostFormData) => {
   };
 };
 
-// Удаление поста
 export const deletePost = (postId: string) => {
   return async (dispatch: Dispatch & ThunkDispatch) => {
     dispatch(deletePostRequest());
     try {
-      // Сначала удаляем все комментарии к посту через commentsSlice
       await dispatch(deleteCommentsByPost(postId));
 
-      // Затем удаляем сам пост
       const postDoc = doc(postsCollection, postId);
       await deleteDoc(postDoc);
 
       dispatch(deletePostSuccess(postId));
+      return Promise.resolve();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error deleting post';
       dispatch(deletePostFailure(errorMessage));
+      return Promise.reject(error);
     }
   };
 };
