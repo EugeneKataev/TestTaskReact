@@ -1,18 +1,17 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import PostForm from '../../../components/PostForm';
 import { createPost, clearError } from '../../../store/postsSlice';
 import { PostFormData } from '../../../lib/validations';
-import { RootState, AppDispatch } from '../../../lib/store';
-import '../../../styles/CreatePost.css';
+import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
+import styles from './CreatePost.module.scss';
 
 export default function CreatePost() {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { loading, error } = useSelector((state: RootState) => state.posts);
+  const { loading, error } = useAppSelector((state) => state.posts);
 
   // Clear errors when component mounts
   useEffect(() => {
@@ -35,16 +34,16 @@ export default function CreatePost() {
   }, [loading, error, router]);
 
   return (
-    <div className="create-post-page">
-      <div className="page-header">
-        <h1 className="page-title">Create New Post</h1>
+    <div className={styles.createPostPage}>
+      <div className={styles.pageHeader}>
+        <h1 className={styles.pageTitle}>Create New Post</h1>
       </div>
 
       {error && (
-        <div className="error-banner">
-          <p className="error-text">{error}</p>
+        <div className={styles.errorBanner}>
+          <p className={styles.errorText}>{error}</p>
           <button 
-            className="error-dismiss"
+            className={styles.errorDismiss}
             onClick={() => dispatch(clearError())}
           >
             ×

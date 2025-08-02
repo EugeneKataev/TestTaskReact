@@ -1,0 +1,61 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.pageContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.loadingState {
+  @include flex-center;
+  @include flex-column;
+  padding: 60px $spacing-xl;
+  text-align: center;
+
+  p {
+    color: #5a6c7d;
+    font-size: $font-lg;
+    margin: 0;
+  }
+}
+
+.errorState {
+  @include flex-center;
+  @include flex-column;
+  padding: 60px $spacing-xl;
+  text-align: center;
+  background-color: $background-secondary;
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+
+  h2 {
+    color: $danger-color;
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0 0 $spacing-xl 0;
+    font-size: $font-base;
+  }
+}
+
+.backButton {
+  @include button-primary;
+}
+
+.commentsSection {
+  margin-top: $spacing-4xl;
+}
+
+@include tablet {
+  .pageContainer {
+    padding: $spacing-lg;
+  }
+
+  .commentsSection {
+    margin-top: $spacing-3xl;
+  }
+}

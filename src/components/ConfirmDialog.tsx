@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import '../styles/ConfirmDialog.css';
+import styles from './ConfirmDialog.module.scss';
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -33,27 +33,27 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   };
 
   return (
-    <div className="dialogOverlay" onClick={handleOverlayClick}>
-      <div className="dialogContent">
-        <div className="dialogHeader">
-          <h3 className="dialogTitle">{title}</h3>
+    <div className={styles.dialogOverlay} onClick={handleOverlayClick}>
+      <div className={styles.dialogContent}>
+        <div className={styles.dialogHeader}>
+          <h3 className={styles.dialogTitle}>{title}</h3>
         </div>
         
-        <div className="dialogBody">
-          <p className="dialogMessage">{message}</p>
+        <div className={styles.dialogBody}>
+          <p className={styles.dialogMessage}>{message}</p>
         </div>
         
-        <div className="dialogActions">
+        <div className={styles.dialogActions}>
           <button
             onClick={onCancel}
-            className="dialogButton cancelButton"
+            className={`${styles.dialogButton} ${styles.cancelButton}`}
             disabled={loading}
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
-            className="dialogButton confirmButton"
+            className={`${styles.dialogButton} ${styles.confirmButton}`}
             disabled={loading}
           >
             {loading ? 'Deleting...' : confirmText}

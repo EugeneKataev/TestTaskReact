@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Post } from '@/types';
 import ConfirmDialog from './ConfirmDialog';
-import '../styles/PostCard.css';
+import styles from './PostCard.module.scss';
 
 interface PostCardProps {
   post: Post;
@@ -71,18 +71,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = f
   };
 
   return (
-    <article className="postCard" onClick={handleCardClick}>
-      <div className="postCardContent">
-        <h2 className="postCardTitle">{post.title}</h2>
-        <p className="postCardExcerpt">{getExcerpt(post.content)}</p>
-        <div className="postCardMeta">
-          <span className="postCardAuthor">By {post.author}</span>
-          <div className="postCardDate">{formatDate(post.createdAt)}</div>
+    <article className={styles.postCard} onClick={handleCardClick}>
+      <div className={styles.postCardContent}>
+        <h2 className={styles.postCardTitle}>{post.title}</h2>
+        <p className={styles.postCardExcerpt}>{getExcerpt(post.content)}</p>
+        <div className={styles.postCardMeta}>
+          <span className={styles.postCardAuthor}>By {post.author}</span>
+          <div className={styles.postCardDate}>{formatDate(post.createdAt)}</div>
         </div>
       </div>
-      <div className="postCardActions">
+      <div className={styles.postCardActions}>
         <button 
-          className="postCardBtn postCardBtnEdit"
+          className={`${styles.postCardBtn} ${styles.postCardBtnEdit}`}
           onClick={handleEditClick}
           title="Edit post"
           disabled={loading}
@@ -90,7 +90,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onEdit, onDelete, loading = f
           Edit
         </button>
         <button 
-          className="postCardBtn postCardBtnDelete"
+          className={`${styles.postCardBtn} ${styles.postCardBtnDelete}`}
           onClick={handleDeleteClick}
           title="Delete post"
           disabled={loading}

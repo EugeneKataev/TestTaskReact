@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { PostSchema, PostFormData } from '../lib/validations';
 import { Post } from '../types';
-import '../styles/PostForm.css';
+import styles from './PostForm.module.scss';
 
 interface PostFormProps {
     initialData?: Partial<Post>;
@@ -12,187 +14,95 @@ interface PostFormProps {
     submitButtonText?: string;
 }
 
-interface FormErrors {
-    title?: string;
-    content?: string;
-    author?: string;
-    general?: string;
-}
-
 const PostForm: React.FC<PostFormProps> = ({
     initialData,
     onSubmit,
     loading = false,
     submitButtonText = 'Save Post'
 }) => {
-    const [formData, setFormData] = useState<PostFormData>({
-        title: initialData?.title || '',
-        content: initialData?.content || '',
-        author: initialData?.author || ''
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+    } = useForm<PostFormData>({
+        resolver: zodResolver(PostSchema),
+        defaultValues: {
+            title: initialData?.title || '',
+            content: initialData?.content || '',
+            author: initialData?.author || ''
+        }
     });
 
-    const [errors, setErrors] = useState<FormErrors>({});
-
-    const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-
-        // Валидируем поле в реальном времени (с небольшой задержкой)
-        setTimeout(() => {
-            validateField(name as keyof FormErrors, value);
-        }, 300);
-    };
-
-    const handleBlur = (
-        e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        validateField(name as keyof FormErrors, value);
-    };
-
-    const validateField = (fieldName: keyof FormErrors, value: string) => {
-        try {
-            // Валидируем конкретное поле
-            if (fieldName === 'title') {
-                PostSchema.shape.title.parse(value);
-            } else if (fieldName === 'content') {
-                PostSchema.shape.content.parse(value);
-            } else if (fieldName === 'author') {
-                PostSchema.shape.author.parse(value);
-            }
-
-            // Если валидация прошла, убираем ошибку для этого поля
-            setErrors(prev => ({
-                ...prev,
-                [fieldName]: undefined
-            }));
-        } catch (error: unknown) {
-            if (error && typeof error === 'object' && 'issues' in error) {
-                const zodError = error as { issues: Array<{ message: string }> };
-                const errorMessage = zodError.issues[0]?.message || 'Invalid value';
-                setErrors(prev => ({
-                    ...prev,
-                    [fieldName]: errorMessage
-                }));
-            }
-        }
-    };
-
-    const validateForm = (): boolean => {
-        try {
-            PostSchema.parse(formData);
-            setErrors({});
-            return true;
-        } catch (error: unknown) {
-            const newErrors: FormErrors = {};
-
-            if (error && typeof error === 'object' && 'issues' in error) {
-                const zodError = error as { issues: Array<{ path: string[]; message: string }> };
-                zodError.issues.forEach((err) => {
-                    const field = err.path[0] as keyof FormErrors;
-                    newErrors[field] = err.message;
-                });
-            }
-
-            setErrors(newErrors);
-            return false;
-        }
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (loading) return;
-
-        if (validateForm()) {
-            onSubmit(formData);
+    const onFormSubmit = (data: PostFormData) => {
+        if (!loading) {
+            onSubmit(data);
         }
     };
 
     return (
-        <div className="postFormContainer">
-            <form onSubmit={handleSubmit} className="postForm">
-                {errors.general && (
-                    <div className="errorMessage generalError">
-                        {errors.general}
-                    </div>
-                )}
-
-                <div className="formGroup">
-                    <label htmlFor="title" className="formLabel">
+        <div className={styles.postFormContainer}>
+            <form onSubmit={handleSubmit(onFormSubmit)} className={styles.postForm}>
+                <div className={styles.formGroup}>
+                    <label htmlFor="title" className={styles.formLabel}>
                         Title
                     </label>
                     <input
                         type="text"
                         id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className={`formInput ${errors.title ? 'error' : ''}`}
+                        {...register('title')}
+                        className={`${styles.formInput} ${errors.title ? 'error' : ''}`}
                         placeholder="Enter post title"
                         disabled={loading}
                     />
                     {errors.title && (
-                        <div className="errorMessage">
-                            {errors.title}
+                        <div className={styles.errorMessage}>
+                            {errors.title.message}
                         </div>
                     )}
                 </div>
 
-                <div className="formGroup">
-                    <label htmlFor="author" className="formLabel">
+                <div className={styles.formGroup}>
+                    <label htmlFor="author" className={styles.formLabel}>
                         Author
                     </label>
                     <input
                         type="text"
                         id="author"
-                        name="author"
-                        value={formData.author}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className={`formInput ${errors.author ? 'error' : ''}`}
+                        {...register('author')}
+                        className={`${styles.formInput} ${errors.author ? 'error' : ''}`}
                         placeholder="Enter author name"
                         disabled={loading}
                     />
                     {errors.author && (
-                        <div className="errorMessage">
-                            {errors.author}
+                        <div className={styles.errorMessage}>
+                            {errors.author.message}
                         </div>
                     )}
                 </div>
 
-                <div className="formGroup">
-                    <label htmlFor="content" className="formLabel">
+                <div className={styles.formGroup}>
+                    <label htmlFor="content" className={styles.formLabel}>
                         Content
                     </label>
                     <textarea
                         id="content"
-                        name="content"
-                        value={formData.content}
-                        onChange={handleInputChange}
-                        onBlur={handleBlur}
-                        className={`formTextarea ${errors.content ? 'error' : ''}`}
+                        {...register('content')}
+                        className={`${styles.formTextarea} ${errors.content ? 'error' : ''}`}
                         placeholder="Enter post content (minimum 10 characters)"
                         rows={8}
                         disabled={loading}
                     />
                     {errors.content && (
-                        <div className="errorMessage">
-                            {errors.content}
+                        <div className={styles.errorMessage}>
+                            {errors.content.message}
                         </div>
                     )}
                 </div>
 
-                <div className="formActions">
+                <div className={styles.formActions}>
                     <button
                         type="submit"
-                        className="submitButton"
+                        className={styles.submitButton}
                         disabled={loading}
                     >
                         {loading ? 'Saving...' : submitButtonText}

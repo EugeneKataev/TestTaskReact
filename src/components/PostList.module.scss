@@ -1,0 +1,98 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.postListContainer {
+  width: 100%;
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.loadingState,
+.errorState,
+.emptyState {
+  @include flex-center;
+  @include flex-column;
+  padding: 60px $spacing-xl;
+  text-align: center;
+}
+
+.errorState,
+.emptyState {
+  background-color: $background-secondary;
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+
+  h3 {
+    margin: 0 0 10px 0;
+    font-size: $font-2xl;
+  }
+
+  p {
+    color: $text-secondary;
+    font-size: $font-base;
+    margin: 0;
+  }
+}
+
+.errorState {
+  h3 {
+    color: $danger-color;
+  }
+
+  p {
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.emptyState h3 {
+  color: #495057;
+}
+
+.loadingState p {
+  color: #5a6c7d;
+  font-size: $font-lg;
+  margin: 0;
+}
+
+.retryButton {
+  @include button-primary;
+}
+
+.postListGrid {
+  display: grid;
+  gap: $spacing-xl;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@include large-desktop {
+  .postListContainer {
+    padding: $spacing-lg;
+  }
+
+  .postListGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+  }
+}
+
+@include tablet {
+  .postListContainer {
+    padding: $spacing-md;
+  }
+
+  .postListGrid {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+@include mobile {
+  .postListContainer {
+    padding: $spacing-sm;
+  }
+
+  .postListGrid {
+    gap: 10px;
+  }
+}

@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '@/lib/store';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import { fetchPosts, deletePost } from '@/store/postsSlice';
 import PostCard from './PostCard';
 import { Post } from '@/types';
-import '../styles/PostList.css';
+import styles from './PostList.module.scss';
 
 interface PostListProps {
   posts?: Post[];
@@ -14,9 +13,9 @@ interface PostListProps {
 }
 
 const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLoading }) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   
-  const { posts: storePosts, loading: storeLoading, error } = useSelector((state: RootState) => state.posts);
+  const { posts: storePosts, loading: storeLoading, error } = useAppSelector((state) => state.posts);
   
   // Use props if provided, otherwise data from store
   const posts = propsPosts || storePosts;
@@ -32,7 +31,6 @@ const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLo
   const handleDeletePost = async (postId: string) => {
     try {
       await dispatch(deletePost(postId));
-      // Пост автоматически удалится из списка через reducer
     } catch (error) {
       console.error('Error deleting post:', error);
     }
@@ -40,11 +38,10 @@ const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLo
 
   if (loading) {
     return (
-      <div className="post-list-container">
-        <div className="loading-state">
+      <div className={styles.postListContainer}>
+        <div className={styles.loadingState}>
           <p>Loading...</p>
         </div>
-
       </div>
     );
   }
@@ -52,37 +49,35 @@ const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLo
   // Error state
   if (error) {
     return (
-      <div className="post-list-container">
-        <div className="error-state">
+      <div className={styles.postListContainer}>
+        <div className={styles.errorState}>
           <h3>Loading Error</h3>
           <p>{error}</p>
           <button 
-            className="retry-button"
+            className={styles.retryButton}
             onClick={() => dispatch(fetchPosts())}
           >
             Try Again
           </button>
         </div>
-
       </div>
     );
   }
 
   if (!posts || posts.length === 0) {
     return (
-      <div className="post-list-container">
-        <div className="empty-state">
+      <div className={styles.postListContainer}>
+        <div className={styles.emptyState}>
           <h3>No posts to display</h3>
           <p>No one has created any posts yet. Be the first!</p>
         </div>
-
       </div>
     );
   }
 
   return (
-    <div className="post-list-container">
-      <div className="post-list-grid">
+    <div className={styles.postListContainer}>
+      <div className={styles.postListGrid}>
         {posts.map((post) => (
           <PostCard
             key={post.id}
@@ -92,8 +87,6 @@ const PostList: React.FC<PostListProps> = ({ posts: propsPosts, loading: propsLo
           />
         ))}
       </div>
-
-
     </div>
   );
 };

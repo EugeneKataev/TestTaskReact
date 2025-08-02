@@ -1,0 +1,58 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.postFormContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.postForm {
+  @include card;
+  padding: $spacing-2xl;
+}
+
+.formGroup {
+  margin-bottom: $spacing-lg;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: $spacing-xs;
+  font-weight: $font-semibold;
+  color: $text-primary;
+  font-size: $font-sm;
+}
+
+.formInput,
+.formTextarea {
+  @include form-input;
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.errorMessage {
+  color: $danger-color;
+  font-size: $font-xs;
+  margin-top: $spacing-xs;
+}
+
+.generalError {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: $radius-sm;
+  padding: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+.formActions {
+  margin-top: $spacing-xl;
+}
+
+.submitButton {
+  @include button-primary;
+  padding: 10px $spacing-xl;
+}

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import '../styles/Layout.css';
+import styles from './Layout.module.scss';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,31 +16,31 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="layout">
-      <header className="header">
-        <div className="header-container">
-          <div className="header-content">
-            <Link href="/" className="logo">
+    <div className={styles.layout}>
+      <header className={styles.header}>
+        <div className={styles.headerContainer}>
+          <div className={styles.headerContent}>
+            <Link href="/" className={styles.logo}>
               <h1>Blog</h1>
             </Link>
             
             <button 
-              className="mobile-menu-button"
+              className={styles.mobileMenuButton}
               onClick={toggleMobileMenu}
               aria-label="Open menu"
             >
-              <span className={`hamburger ${isMobileMenuOpen ? 'open' : ''}`}>
+              <span className={`${styles.hamburger} ${isMobileMenuOpen ? 'open' : ''}`}>
                 <span></span>
                 <span></span>
                 <span></span>
               </span>
             </button>
 
-            <nav className={`nav ${isMobileMenuOpen ? 'nav-open' : ''}`}>
-              <Link href="/" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+            <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.navOpen : ''}`}>
+              <Link href="/" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>
                 Home
               </Link>
-              <Link href="/post/create" className="nav-link" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link href="/post/create" className={styles.navLink} onClick={() => setIsMobileMenuOpen(false)}>
                 Create Post
               </Link>
             </nav>
@@ -48,8 +48,8 @@ export default function Layout({ children }: LayoutProps) {
         </div>
       </header>
       
-      <main className="main">
-        <div className="main-container">
+      <main className={styles.main}>
+        <div className={styles.mainContainer}>
           {children}
         </div>
       </main>

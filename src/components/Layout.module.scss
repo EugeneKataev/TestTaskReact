@@ -1,0 +1,199 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.layout {
+  min-height: 100vh;
+  @include flex-column;
+}
+
+.header {
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+}
+
+.headerContainer {
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.headerContent {
+  @include flex-between;
+  height: 4rem;
+}
+
+.logo {
+  h1 {
+    font-size: 1.5rem;
+    font-weight: $font-bold;
+    color: var(--primary-color);
+  }
+
+  &:hover h1 {
+    color: var(--primary-hover);
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.navLink {
+  font-weight: $font-medium;
+  color: var(--text-secondary);
+  padding: 0.5rem 0;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}
+
+.mobileMenuButton {
+  display: none;
+  @include flex-center;
+  flex-direction: column;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  width: 1.5rem;
+  height: 1.2rem;
+  position: relative;
+  justify-content: space-between;
+
+  span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: var(--text-primary);
+  }
+
+  &.open {
+    span:nth-child(1) {
+      transform: rotate(45deg);
+      background-color: $danger-color;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform-origin: center;
+    }
+
+    span:nth-child(2) {
+      display: none;
+    }
+
+    span:nth-child(3) {
+      transform: rotate(-45deg);
+      background-color: $danger-color;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform-origin: center;
+    }
+  }
+}
+
+.main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+.mainContainer {
+  max-width: $breakpoint-xl;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Desktop - убеждаемся что мобильное меню скрыто
+@include desktop {
+  .mobileMenuButton {
+    display: none;
+  }
+  
+  .nav {
+    display: flex;
+  }
+}
+
+@include tablet {
+  .mobileMenuButton {
+    display: flex;
+  }
+
+  .logo h1 {
+    padding-left: 10px;
+  }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--background);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    display: none;
+    z-index: $z-dropdown;
+  }
+
+  .navOpen {
+    display: flex;
+  }
+
+  .navLink {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: $font-medium;
+    color: var(--text-primary);
+    background-color: var(--background);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--background-secondary);
+      color: var(--primary-color);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .main {
+    padding: 1rem 0;
+  }
+
+  .headerContainer,
+  .mainContainer {
+    padding: 0 0.75rem;
+  }
+}
+
+@include mobile {
+  .headerContent {
+    height: 3.5rem;
+  }
+
+  .logo h1 {
+    font-size: 1.25rem;
+  }
+
+  .headerContainer,
+  .mainContainer {
+    padding: 0 0.5rem;
+  }
+}

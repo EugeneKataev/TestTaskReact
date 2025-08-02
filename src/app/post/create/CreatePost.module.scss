@@ -1,0 +1,106 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.createPostPage {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.pageHeader {
+  text-align: center;
+  margin-bottom: $spacing-4xl;
+}
+
+.pageTitle {
+  font-size: $spacing-3xl;
+  font-weight: $font-bold;
+  color: $text-primary;
+  margin: 0 0 $spacing-md 0;
+}
+
+.errorBanner {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-2xl;
+  @include flex-between;
+}
+
+.errorText {
+  color: #721c24;
+  margin: 0;
+  font-size: $font-sm;
+  font-weight: $font-medium;
+}
+
+.errorDismiss {
+  background: none;
+  border: none;
+  color: #721c24;
+  font-size: $spacing-xl;
+  font-weight: $font-bold;
+  cursor: pointer;
+  padding: 0;
+  width: $spacing-2xl;
+  height: $spacing-2xl;
+  @include flex-center;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(114, 28, 36, 0.1);
+  }
+}
+
+@include tablet {
+  .createPostPage {
+    padding: $spacing-lg;
+  }
+
+  .pageHeader {
+    margin-bottom: $spacing-3xl;
+  }
+
+  .pageTitle {
+    font-size: 28px;
+  }
+
+  .errorBanner {
+    padding: $spacing-md;
+    margin-bottom: $spacing-xl;
+  }
+
+  .errorText {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: #{$breakpoint-md + 1px}) and (max-width: $breakpoint-lg) {
+  .createPostPage {
+    padding: $spacing-2xl;
+  }
+
+  .pageHeader {
+    margin-bottom: 36px;
+  }
+
+  .pageTitle {
+    font-size: 30px;
+  }
+}
+
+@include large-desktop {
+  .createPostPage {
+    padding: $spacing-3xl;
+  }
+
+  .pageHeader {
+    margin-bottom: $spacing-5xl;
+  }
+
+  .pageTitle {
+    font-size: 36px;
+  }
+}

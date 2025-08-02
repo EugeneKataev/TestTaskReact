@@ -53,7 +53,6 @@ const initialState: PostsState = {
   error: null,
 };
 
-// Action creators for fetchPosts
 export const fetchPostsRequest = () => ({
   type: FETCH_POSTS_REQUEST,
 });
@@ -68,7 +67,6 @@ export const fetchPostsFailure = (error: string) => ({
   payload: error,
 });
 
-// Action creators for fetchPostById
 export const fetchPostByIdRequest = () => ({
   type: FETCH_POST_BY_ID_REQUEST,
 });
@@ -83,7 +81,6 @@ export const fetchPostByIdFailure = (error: string) => ({
   payload: error,
 });
 
-// Action creators for createPost
 export const createPostRequest = () => ({
   type: CREATE_POST_REQUEST,
 });
@@ -98,7 +95,6 @@ export const createPostFailure = (error: string) => ({
   payload: error,
 });
 
-// Action creators for updatePost
 export const updatePostRequest = () => ({
   type: UPDATE_POST_REQUEST,
 });
@@ -113,7 +109,6 @@ export const updatePostFailure = (error: string) => ({
   payload: error,
 });
 
-// Action creators for deletePost
 export const deletePostRequest = () => ({
   type: DELETE_POST_REQUEST,
 });
@@ -250,10 +245,8 @@ export const deletePost = (postId: string) => {
   };
 };
 
-// Reducer
 const postsReducer = (state = initialState, action: { type: string; payload?: unknown }) => {
   switch (action.type) {
-    // Actions for fetching all posts
     case FETCH_POSTS_REQUEST:
       return {
         ...state,
@@ -293,7 +286,6 @@ const postsReducer = (state = initialState, action: { type: string; payload?: un
         error: action.payload as string,
       };
 
-    // Actions for creating a post
     case CREATE_POST_REQUEST:
       return {
         ...state,
@@ -313,7 +305,6 @@ const postsReducer = (state = initialState, action: { type: string; payload?: un
         error: action.payload as string,
       };
 
-    // Actions for updating a post
     case UPDATE_POST_REQUEST:
       return {
         ...state,
@@ -337,7 +328,6 @@ const postsReducer = (state = initialState, action: { type: string; payload?: un
         error: action.payload as string,
       };
 
-    // Actions for deleting a post
     case DELETE_POST_REQUEST:
       return {
         ...state,
@@ -359,7 +349,6 @@ const postsReducer = (state = initialState, action: { type: string; payload?: un
         error: action.payload as string,
       };
 
-    // Utility actions
     case CLEAR_POSTS_ERROR:
       return {
         ...state,

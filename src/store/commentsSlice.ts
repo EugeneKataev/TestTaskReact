@@ -11,7 +11,6 @@ import {
 import { db, commentsCollection, convertCommentFromFirestore } from '@/lib/firebase';
 import { Dispatch } from 'redux';
 
-// type
 export const FETCH_COMMENTS_REQUEST = 'FETCH_COMMENTS_REQUEST';
 export const FETCH_COMMENTS_SUCCESS = 'FETCH_COMMENTS_SUCCESS';
 export const FETCH_COMMENTS_FAILURE = 'FETCH_COMMENTS_FAILURE';
@@ -23,21 +22,18 @@ export const DELETE_COMMENTS_BY_POST_SUCCESS = 'DELETE_COMMENTS_BY_POST_SUCCESS'
 export const DELETE_COMMENTS_BY_POST_FAILURE = 'DELETE_COMMENTS_BY_POST_FAILURE';
 export const CLEAR_COMMENTS_ERROR = 'CLEAR_COMMENTS_ERROR';
 
-// Status interface
 export interface CommentsState {
   comments: Comment[];
   loading: boolean;
   error: string | null;
 }
 
-// Initial state
 const initialState: CommentsState = {
   comments: [],
   loading: false,
   error: null,
 };
 
-// Action creators
 export const fetchCommentsRequest = () => ({
   type: FETCH_COMMENTS_REQUEST,
 });
@@ -112,7 +108,7 @@ export const fetchComments = (postId: string) => {
   };
 };
 
-// Async thunk for create comment
+
 export const createComment = (postId: string, commentData: CommentFormData) => {
   return async (dispatch: Dispatch) => {
     dispatch(createCommentRequest());
@@ -125,7 +121,6 @@ export const createComment = (postId: string, commentData: CommentFormData) => {
         createdAt: serverTimestamp()
       });
       
-      // Create an object of commentary for adding to Store
       const newComment: Comment = {
         id: docRef.id,
         postId,
@@ -142,7 +137,7 @@ export const createComment = (postId: string, commentData: CommentFormData) => {
   };
 };
 
-// Async thunk for delete all comment for post
+
 export const deleteCommentsByPost = (postId: string) => {
   return async (dispatch: Dispatch) => {
     dispatch(deleteCommentsByPostRequest());
@@ -155,7 +150,6 @@ export const deleteCommentsByPost = (postId: string) => {
 
       const querySnapshot = await getDocs(q);
 
-      // delete all the comments of the post
       const deletePromises = querySnapshot.docs.map(commentDoc =>
         deleteDoc(doc(db, 'comments', commentDoc.id))
       );
@@ -172,7 +166,6 @@ export const deleteCommentsByPost = (postId: string) => {
   };
 };
 
-// Reducer
 const commentsReducer = (state = initialState, action: { type: string; payload?: unknown }) => {
   switch (action.type) {
     case FETCH_COMMENTS_REQUEST:

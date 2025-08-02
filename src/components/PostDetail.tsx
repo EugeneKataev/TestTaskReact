@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Post, Comment } from '../types';
 import ConfirmDialog from './ConfirmDialog';
-import '../styles/PostDetail.css';
+import styles from './PostDetail.module.scss';
 
 interface PostDetailProps {
   post: Post;
@@ -46,17 +46,17 @@ const PostDetail: React.FC<PostDetailProps> = ({
   };
 
   return (
-    <div className="post-detail-container">
-      <article className="post-detail">
-        <header className="post-header">
-          <h1 className="post-title">{post.title}</h1>
-          <div className="post-meta">
-            <span className="post-author">By {post.author}</span>
-            <span className="post-date">
+    <div className={styles.postDetailContainer}>
+      <article className={styles.postDetail}>
+        <header className={styles.postHeader}>
+          <h1 className={styles.postTitle}>{post.title}</h1>
+          <div className={styles.postMeta}>
+            <span className={styles.postAuthor}>By {post.author}</span>
+            <span className={styles.postDate}>
               Created: {formatDate(post.createdAt)}
             </span>
             {post.updatedAt.getTime() !== post.createdAt.getTime() && (
-              <span className="post-updated">
+              <span className={styles.postUpdated}>
                 Updated: {formatDate(post.updatedAt)}
               </span>
             )}
@@ -64,11 +64,11 @@ const PostDetail: React.FC<PostDetailProps> = ({
         </header>
 
         {(onEdit || onDelete) && (
-          <div className="post-actions">
+          <div className={styles.postActions}>
             {onEdit && (
               <button
                 onClick={onEdit}
-                className="action-button edit-button"
+                className={`${styles.actionButton} ${styles.editButton}`}
                 disabled={loading}
               >
                 Edit Post
@@ -77,7 +77,7 @@ const PostDetail: React.FC<PostDetailProps> = ({
             {onDelete && (
               <button
                 onClick={handleDeleteClick}
-                className="action-button delete-button"
+                className={`${styles.actionButton} ${styles.deleteButton}`}
                 disabled={loading}
               >
                 Delete Post
@@ -86,36 +86,36 @@ const PostDetail: React.FC<PostDetailProps> = ({
           </div>
         )}
 
-        <div className="post-content">
-          <div className="content-text">
+        <div className={styles.postContent}>
+          <div className={styles.contentText}>
             {post.content.split('\n').map((paragraph, index) => (
-              <p key={index} className="content-paragraph">
+              <p key={index} className={styles.contentParagraph}>
                 {paragraph}
               </p>
             ))}
           </div>
         </div>
 
-        <section className="comments-section">
-          <h2 className="comments-title">
+        <section className={styles.commentsSection}>
+          <h2 className={styles.commentsTitle}>
             Comments ({comments.length})
           </h2>
           
           {comments.length === 0 ? (
-            <div className="no-comments">
+            <div className={styles.noComments}>
               <p>No comments yet</p>
             </div>
           ) : (
-            <div className="comments-list">
+            <div className={styles.commentsList}>
               {comments.map((comment) => (
-                <div key={comment.id} className="comment-item">
-                  <div className="comment-header">
-                    <span className="comment-author">{comment.author}</span>
-                    <span className="comment-date">
+                <div key={comment.id} className={styles.commentItem}>
+                  <div className={styles.commentHeader}>
+                    <span className={styles.commentAuthor}>{comment.author}</span>
+                    <span className={styles.commentDate}>
                       {formatDate(comment.createdAt)}
                     </span>
                   </div>
-                  <div className="comment-text">
+                  <div className={styles.commentText}>
                     {comment.text}
                   </div>
                 </div>
@@ -135,8 +135,6 @@ const PostDetail: React.FC<PostDetailProps> = ({
         onCancel={handleCancelDelete}
         loading={loading}
       />
-
-
     </div>
   );
 };

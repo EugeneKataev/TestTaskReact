@@ -1,0 +1,265 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.postDetailContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+}
+
+.postDetail {
+  background: white;
+  border-radius: $radius-lg;
+  padding: $spacing-3xl;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+// Post Header Styles
+.postHeader {
+  margin-bottom: $spacing-2xl;
+  padding-bottom: $spacing-xl;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.postTitle {
+  font-size: 2.5rem;
+  font-weight: $font-bold;
+  color: $text-primary;
+  margin: 0 0 $spacing-lg 0;
+  line-height: 1.2;
+}
+
+.postMeta {
+  @include flex-column;
+  gap: $spacing-sm;
+  color: $text-secondary;
+  font-size: $font-sm;
+}
+
+.postAuthor {
+  font-weight: $font-semibold;
+  color: $primary-color;
+}
+
+.postDate,
+.postUpdated {
+  font-style: italic;
+}
+
+// Post Actions Styles
+.postActions {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-2xl;
+  padding-bottom: $spacing-xl;
+  border-bottom: 1px solid $border-color;
+}
+
+.actionButton {
+  @include button-base;
+  padding: 10px $spacing-xl;
+  font-weight: $font-semibold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editButton {
+  @include button-success;
+}
+
+.deleteButton {
+  @include button-danger;
+}
+
+// Post Content Styles
+.postContent {
+  margin-bottom: $spacing-4xl;
+}
+
+.contentText {
+  font-size: $font-base;
+  line-height: 1.7;
+  color: $text-primary;
+}
+
+.contentParagraph {
+  margin: 0 0 $spacing-lg 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Comments Section Styles
+.commentsSection {
+  border-top: 2px solid #f0f0f0;
+  padding-top: $spacing-3xl;
+}
+
+.commentsTitle {
+  font-size: 1.5rem;
+  font-weight: $font-semibold;
+  color: $text-primary;
+  margin: 0 0 $spacing-2xl 0;
+}
+
+.noComments {
+  text-align: center;
+  padding: $spacing-4xl $spacing-xl;
+  color: $text-secondary;
+  font-style: italic;
+}
+
+.commentsList {
+  @include flex-column;
+  gap: $spacing-xl;
+}
+
+.commentItem {
+  background: $background-secondary;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  border-left: 4px solid $primary-color;
+}
+
+.commentHeader {
+  @include flex-between;
+  margin-bottom: $spacing-sm;
+}
+
+.commentAuthor {
+  font-weight: $font-semibold;
+  color: $primary-color;
+  font-size: $font-sm;
+}
+
+.commentDate {
+  font-size: $font-xs;
+  color: $text-secondary;
+  font-style: italic;
+}
+
+.commentText {
+  color: $text-primary;
+  line-height: 1.5;
+  font-size: $font-sm;
+}
+
+// Responsive Styles
+@include tablet {
+  .postDetailContainer {
+    padding: $spacing-lg;
+  }
+
+  .postDetail {
+    padding: $spacing-xl;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .postTitle {
+    font-size: 1.8rem;
+    margin-bottom: $spacing-md;
+  }
+
+  .postMeta {
+    font-size: 13px;
+  }
+
+  .postActions {
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    .actionButton {
+      width: 100%;
+      padding: $spacing-md $spacing-xl;
+    }
+  }
+
+  .contentText {
+    font-size: 15px;
+  }
+
+  .commentsTitle {
+    font-size: $font-2xl;
+  }
+
+  .commentHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-xs;
+  }
+
+  .commentAuthor {
+    font-size: 13px;
+  }
+
+  .commentDate {
+    font-size: 11px;
+  }
+
+  .commentText {
+    font-size: 13px;
+  }
+}
+
+// Tablet Styles
+@media (min-width: #{$breakpoint-md + 1px}) and (max-width: $breakpoint-lg) {
+  .postDetailContainer {
+    padding: $spacing-2xl;
+  }
+
+  .postDetail {
+    padding: 28px;
+  }
+
+  .postTitle {
+    font-size: 2.2rem;
+  }
+
+  .postActions {
+    justify-content: flex-start;
+  }
+}
+
+// Desktop Styles
+@include large-desktop {
+  .postDetailContainer {
+    padding: $spacing-3xl;
+  }
+
+  .postMeta {
+    flex-direction: row;
+    gap: $spacing-lg;
+
+    span:not(:last-child)::after {
+      content: '•';
+      margin-left: $spacing-lg;
+      color: #ccc;
+    }
+  }
+
+  .postActions {
+    justify-content: flex-start;
+  }
+
+  .commentHeader {
+    align-items: center;
+  }
+}
+
+// Print Styles
+@media print {
+  .postActions {
+    display: none;
+  }
+
+  .postDetail {
+    padding: 0;
+  }
+
+  .postDetailContainer {
+    padding: 0;
+  }
+}

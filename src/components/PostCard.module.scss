@@ -1,0 +1,55 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.postCard {
+  @include card-hover;
+  margin-bottom: $spacing-lg;
+}
+
+.postCardContent {
+  margin-bottom: $spacing-md;
+}
+
+.postCardTitle {
+  font-size: $font-xl;
+  font-weight: $font-semibold;
+  color: $text-primary;
+  margin: 0 0 $spacing-sm 0;
+}
+
+.postCardExcerpt {
+  color: $text-secondary;
+  margin: 0 0 $spacing-md 0;
+}
+
+.postCardMeta {
+  font-size: $font-sm;
+  color: #888;
+}
+
+.postCardAuthor {
+  font-weight: $font-medium;
+}
+
+.postCardDate {
+  margin-top: $spacing-xs;
+}
+
+.postCardActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.postCardBtn {
+  @include button-base;
+  font-size: $font-sm;
+  flex: 1;
+}
+
+.postCardBtnEdit {
+  @include button-primary;
+}
+
+.postCardBtnDelete {
+  @include button-danger;
+}

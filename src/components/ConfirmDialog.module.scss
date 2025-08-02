@@ -1,0 +1,61 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.dialogOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  @include flex-center;
+  z-index: $z-modal;
+  padding: $spacing-xl;
+}
+
+.dialogContent {
+  background: white;
+  border-radius: $radius-sm;
+  max-width: 400px;
+  width: 100%;
+}
+
+.dialogHeader {
+  padding: $spacing-lg $spacing-lg 0 $spacing-lg;
+  border-bottom: 1px solid #eee;
+}
+
+.dialogTitle {
+  margin: 0 0 $spacing-lg 0;
+  font-size: $font-xl;
+  font-weight: $font-semibold;
+  color: $text-primary;
+}
+
+.dialogBody {
+  padding: $spacing-lg;
+}
+
+.dialogMessage {
+  margin: 0;
+  color: $text-secondary;
+}
+
+.dialogActions {
+  padding: 0 $spacing-lg $spacing-lg $spacing-lg;
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: flex-end;
+}
+
+.dialogButton {
+  @include button-base;
+}
+
+.cancelButton {
+  @include button-secondary;
+}
+
+.confirmButton {
+  @include button-danger;
+}
