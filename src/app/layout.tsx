@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import Layout from "../components/Layout/Layout";
+import StyledComponentsRegistry from "../lib/registry";
 
 export const metadata: Metadata = {
   title: "Blog Application",
@@ -15,12 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <Providers>
-          <Layout>
-            {children}
-          </Layout>
-        </Providers>
+      <body suppressHydrationWarning={true}>
+        <StyledComponentsRegistry>
+          <Providers>
+            <Layout>
+              {children}
+            </Layout>
+          </Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
