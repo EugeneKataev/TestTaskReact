@@ -1,0 +1,61 @@
+export const theme = {
+  colors: {
+    primary: '#2563eb',
+    primaryHover: '#1d4ed8',
+    textPrimary: '#1f2937',
+    textSecondary: '#6b7280',
+    background: '#ffffff',
+    backgroundSecondary: '#f9fafb',
+    border: '#e5e7eb',
+    success: '#28a745',
+    successHover: '#218838',
+    danger: '#dc3545',
+    dangerHover: '#c82333',
+    warning: '#ffc107',
+    info: '#17a2b8',
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '20px',
+    '2xl': '24px',
+    '3xl': '32px',
+    '4xl': '40px',
+    '5xl': '48px',
+  },
+  fontSize: {
+    xs: '12px',
+    sm: '14px',
+    base: '16px',
+    lg: '18px',
+    xl: '20px',
+    '2xl': '24px',
+    '3xl': '32px',
+  },
+  fontWeight: {
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  },
+  borderRadius: {
+    sm: '4px',
+    md: '6px',
+    lg: '8px',
+  },
+  breakpoints: {
+    sm: '480px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1200px',
+  },
+  zIndex: {
+    dropdown: 50,
+    sticky: 100,
+    modal: 1000,
+  },
+} as const;
+
+export type Theme = typeof theme;
